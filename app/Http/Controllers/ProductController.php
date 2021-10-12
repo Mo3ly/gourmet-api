@@ -34,7 +34,7 @@ class ProductController extends Controller
         $image = Media::create([
             'title' => $request->name_en,
             'type' => 'photo',
-            'url' => 'http://' . env('APP_URL') . '/images/' . $imageName,
+            'url' => env('APP_URL') . '/images/' . $imageName,
             'created_at' => null
         ]);
 
@@ -80,7 +80,7 @@ class ProductController extends Controller
                 $image = Media::create([
                     'title' => 'image',
                     'type' => 'photo',
-                    'url' => 'http://' . env('APP_URL') . '/images/' . $imageName,
+                    'url' => env('APP_URL') . '/images/' . $imageName,
                     'created_at' => null
                 ]);
                 
