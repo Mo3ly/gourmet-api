@@ -52,7 +52,7 @@ class OrderController extends Controller
         // ]);
 
         $order = Order::create([
-            'username' => $request->username,// . '-' . Str::random(3) ,
+            'username' => $request->username,
             'user_ip' => $request->ip,
             'table_number' =>  $request->table,
         ]);

@@ -7,6 +7,7 @@ use App\Http\Controllers\ResturantController;
 use App\Http\Controllers\MenuCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\BookingController;
 use App\Events\OrderReceived;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -15,6 +16,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $user;
 });
 
+// Auth
 Route::group(['middleware' => ['web']], function () {  
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', AuthController::class);
@@ -27,6 +29,11 @@ Route::get('/resturants/{name}', [ResturantController::class, 'show']);
 
 // Products
 Route::get('/products', [ProductController::class, 'index']);
+
+// Bookings
+Route::get('/bookings', [BookingController::class, 'index']);
+Route::post('/bookings/store', [BookingController::class, 'store']);
+Route::get('/bookings/paginated', [BookingController::class, 'paginate']);
 
 // orders -> make token in order to create 
 Route::post('/orders/store', [OrderController::class, 'store']);
