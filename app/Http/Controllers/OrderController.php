@@ -43,6 +43,7 @@ class OrderController extends Controller
     public function store (Request $request){
         // Notes: 
         //  - check if the same ip or the same table has just made a request and inform the user
+        //  - check user location in gourment
         //  - max orders 4 with status delieverd
 
         // $request->validate([
@@ -70,22 +71,16 @@ class OrderController extends Controller
 
         $orderResource = new OrderResource($order);
 
-        event(new OrderReceived($order));
+        if($orderResource) {
+            try{
+                event(new OrderReceived($order));
+            } catch (Throwable $e){}
 
-        return $orderResource;
+            return response()->json(['success'=>'The order has been placed successfully.']);
+        }
+
     }
     
-    public function destroy(Request $request){
-        $request->validate([
-            'order_id' => 'required',
-        ]);
-        
-        $order = Order::find($request->order_id);
-        $order->delete();       
-
-        return response()->json(['success'=>'The order has been deleted.']);
-    }
-
     public function update(Request $request){
         $request->validate([
             'order_id' => 'required',
@@ -97,5 +92,16 @@ class OrderController extends Controller
         $order->save();   
 
         return response()->json(['success'=>'The product status has been updated.']);
+    }
+
+    public function destroy(Request $request){
+        $request->validate([
+            'order_id' => 'required',
+        ]);
+        
+        $order = Order::find($request->order_id);
+        $order->delete();       
+
+        return response()->json(['success'=>'The order has been deleted.']);
     }
 }

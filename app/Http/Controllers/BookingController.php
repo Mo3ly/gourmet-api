@@ -34,8 +34,6 @@ class BookingController extends Controller
     }
 
     public function store (Request $request){
-        // Notes: 
-
         $request->validate([
             'name' => 'required',
             'email' => 'required|email',
@@ -58,5 +56,29 @@ class BookingController extends Controller
 
             return response()->json(['success'=>'Your booking request has been recieved we will contact you as soon as possible to confirm.']);
         }
+    }
+    
+    public function update(Request $request){
+        $request->validate([
+            'booking_id' => 'required',
+            'status' => 'required',
+        ]);
+        
+        $booking = Booking::find($request->booking_id);
+        $booking->status = $request->status;
+        $booking->save();   
+
+        return response()->json(['success'=>'The booking status has been updated.']);
+    }
+
+    public function destroy(Request $request){
+        $request->validate([
+            'booking_id' => 'required',
+        ]);
+        
+        $booking = Booking::find($request->booking_id);
+        $booking->delete();       
+
+        return response()->json(['success'=>'The booking has been deleted.']);
     }
 }

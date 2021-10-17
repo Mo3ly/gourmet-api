@@ -45,7 +45,10 @@ class OrderReceived implements ShouldBroadcast
      */
     public function broadcastWith()
     {
-        $orderResource = new OrderResource($this->order);
-        return json_decode($orderResource->toJson(), true);
+        // $orderResource = new OrderResource($this->order);
+        return [
+                'order_id' => $this->order->id,
+                'table' => $this->order->table_number
+            ];
     }
 }

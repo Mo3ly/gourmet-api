@@ -10,12 +10,6 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\BookingController;
 use App\Events\OrderReceived;
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    $user = $request->user();
-    $user['scope'] = array($user['scope']); 
-    return $user;
-});
-
 // Auth
 Route::group(['middleware' => ['web']], function () {  
     Route::post('register', [AuthController::class, 'register']);
@@ -30,15 +24,21 @@ Route::get('/resturants/{name}', [ResturantController::class, 'show']);
 // Products
 Route::get('/products', [ProductController::class, 'index']);
 
-// Bookings
-Route::get('/bookings', [BookingController::class, 'index']);
-Route::post('/bookings/store', [BookingController::class, 'store']);
-Route::get('/bookings/paginated', [BookingController::class, 'paginate']);
-
 // orders -> make token in order to create 
 Route::post('/orders/store', [OrderController::class, 'store']);
 
+// Bookings
+Route::post('/bookings/store', [BookingController::class, 'store']);
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
+  // user data
+  Route::get('/user', function (Request $request) {
+      $user = $request->user();
+      $user['scope'] = array($user['scope']); 
+      return $user;
+  });
+
   // resturants
   Route::post('/resturants/store', [ResturantController::class, 'store']);
   Route::post('/resturants/destroy', [ResturantController::class, 'destroy']);
@@ -57,7 +57,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   // orders
   Route::get('/orders', [OrderController::class, 'index']);
   Route::get('/orders/paginated', [OrderController::class, 'paginate']);
-  Route::get('/orders/{id}', [OrderController::class, 'show']);
+  Route::get('/orders/id/{id}', [OrderController::class, 'show']);
   Route::post('/orders/destroy', [OrderController::class, 'destroy']);
   Route::post('/orders/update', [OrderController::class, 'update']);
+
+  // bookings
+  Route::get('/bookings', [BookingController::class, 'index']);
+  Route::get('/bookings/paginated', [BookingController::class, 'paginate']);
+  Route::post('/bookings/destroy', [BookingController::class, 'destroy']);
+  Route::post('/bookings/update', [BookingController::class, 'update']);
 });
