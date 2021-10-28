@@ -9,6 +9,8 @@ use App\Models\OrderProduct;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrderResourceCollection;
 use App\Events\OrderReceived;
+use Carbon\Carbon;
+
 
 class OrderController extends Controller
 {
@@ -20,6 +22,9 @@ class OrderController extends Controller
         return new OrderResource(Order::where('id', $id)->firstOrFail());
     }
 
+    public function todayOrders(){
+        return new OrderResourceCollection(Order::whereDate('created_at', Carbon::today())->orderBy('id', 'DESC')->get());
+    }
     
     public function paginate(){
         $orders = Order::orderBy('id', 'DESC')->paginate(10);

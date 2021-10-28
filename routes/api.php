@@ -57,6 +57,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   // orders
   Route::get('/orders', [OrderController::class, 'index']);
   Route::get('/orders/paginated', [OrderController::class, 'paginate']);
+  Route::get('/orders/today', [OrderController::class, 'todayOrders']);
   Route::get('/orders/id/{id}', [OrderController::class, 'show']);
   Route::post('/orders/destroy', [OrderController::class, 'destroy']);
   Route::post('/orders/update', [OrderController::class, 'update']);
