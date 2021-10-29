@@ -8,6 +8,7 @@ use App\Http\Controllers\MenuCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\AdminDashboardController;
 use App\Events\OrderReceived;
 
 // Auth
@@ -38,6 +39,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
       $user['scope'] = array($user['scope']); 
       return $user;
   });
+
+  // admin dashboard
+  Route::get('/admin/dashboard', [AdminDashboardController::class, 'index']);
 
   // resturants
   Route::post('/resturants/store', [ResturantController::class, 'store']);
