@@ -11,7 +11,7 @@ use App\Http\Resources\ResturantResourceCollection;
 class ResturantController extends Controller
 {   
     public function index(){
-        return new ResturantResourceCollection(Resturant::all());
+        return new ResturantResourceCollection(Resturant::orderBy('id')->get());
     }
     
     public function show($name){
@@ -30,12 +30,12 @@ class ResturantController extends Controller
 
         $imageName = time().'.'.$request->image->getClientOriginalExtension();  
      
-        $request->image->move(public_path('images'), $imageName);
+        $imagePath = $request->image->storeAs('public/resturants', $imageName);
 
         $image = Media::create([
             'title' => $request->name_en,
             'type' => 'photo',
-            'url' => env('APP_URL') . '/images/' . $imageName,
+            'url' => env('APP_URL') . '/storage/resturants/' . $imageName,
             'created_at' => null
         ]);
 
@@ -73,12 +73,12 @@ class ResturantController extends Controller
                 ]);
                 $imageName = time().'.'.$request->image->getClientOriginalExtension();  
             
-                $request->image->move(public_path('images'), $imageName);
+                $imagePath = $request->image->storeAs('public/resturants', $imageName);
     
                 $image = Media::create([
                     'title' => 'image',
                     'type' => 'photo',
-                    'url' => env('APP_URL') . '/images/' . $imageName,
+                    'url' => env('APP_URL') . '/storage/resturants/' . $imageName,
                     'created_at' => null
                 ]);
                 

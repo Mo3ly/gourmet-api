@@ -11,7 +11,7 @@ use App\Http\Resources\ProductResourceCollection;
 class ProductController extends Controller
 {
     public function index(){
-        return new ProductResourceCollection(MenuProduct::all());
+        return new ProductResourceCollection(MenuProduct::orderBy('id')->get());
     }
 
     public function store(Request $request){
@@ -29,12 +29,14 @@ class ProductController extends Controller
 
         $imageName = time().'.'.$request->image->getClientOriginalExtension();  
      
-        $request->image->move(public_path('images'), $imageName);
+        // $request->image->move(public_path('images'), $imageName);
+
+        $imagePath = $request->image->storeAs('public/products', $imageName);
 
         $image = Media::create([
             'title' => $request->name_en,
             'type' => 'photo',
-            'url' => env('APP_URL') . '/images/' . $imageName,
+            'url' => env('APP_URL') . '/storage/products/' . $imageName,
             'created_at' => null
         ]);
 
@@ -75,12 +77,12 @@ class ProductController extends Controller
                 ]);
                 $imageName = time().'.'.$request->image->getClientOriginalExtension();  
             
-                $request->image->move(public_path('images'), $imageName);
+                $imagePath = $request->image->storeAs('public/products', $imageName);
     
                 $image = Media::create([
                     'title' => 'image',
                     'type' => 'photo',
-                    'url' => env('APP_URL') . '/images/' . $imageName,
+                    'url' => env('APP_URL') . '/storage/products/' . $imageName,
                     'created_at' => null
                 ]);
                 
